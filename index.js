@@ -6,7 +6,9 @@ import instituteRoutes from './routes/institue.js';
 import boardRoutes from './routes/board.js';
 import ClassCategoryRoutes from './routes/classCategory.js';
 import ExamRoutes from './routes/examType.js';
-
+import StandardRoutes from './routes/standard.js';
+import SubjectRoutes from './routes/subject.js'
+import UniversityRoutes from './routes/university.js';
 
 
 dotenv.config();
@@ -22,10 +24,14 @@ connectDB().then(() => {
   console.error('DB connection failed:', err);
 });
 
-app.use('/api/institutes', instituteRoutes);
+app.use('/api/register', instituteRoutes);
 app.use('/api/boards', boardRoutes);
 app.use('/api/classCategories', ClassCategoryRoutes);
 app.use('/api/examTypes', ExamRoutes);
+app.use('/api/standards', StandardRoutes);
+app.use('/api/subjects', SubjectRoutes);
+app.use('/api/universities', UniversityRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Hello API Server');

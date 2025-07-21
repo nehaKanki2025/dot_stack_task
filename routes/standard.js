@@ -1,6 +1,6 @@
 // routes/standard.js
 import express from 'express';
-import { createStandard } from '../controller/standardController.js';
+import { createStandard } from '../controller/standard.js';
 
 const router = express.Router();
 

@@ -1,9 +1,7 @@
-import express from 'express';
+// controllers/universityController.js
 import University from '../models/University.js';
 
-const router = express.Router();
-
-router.post('/', async (req, res) => {
+export const createUniversity = async (req, res) => {
   try {
     const university = new University({ name: req.body.name });
     await university.save();
@@ -11,6 +9,4 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
-
-export default router;
+};

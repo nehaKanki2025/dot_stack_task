@@ -1,4 +1,3 @@
-
 import Institute from "../models/Institute.js";
 
 export const registerInstitute = async (req, res) => {
@@ -6,15 +5,25 @@ export const registerInstitute = async (req, res) => {
     const { name, type } = req.body;
 
     if (!name || !type) {
-      return res.status(400).json({ error: 'Institute name and type are required.' });
+      return res
+        .status(400)
+        .json({ error: "Institute name and type are required." });
     }
 
-    let instituteData = { name };
     const normalizedType = type.trim().toLowerCase();
 
+    let instituteData = {
+      name,
+      type: "",
+      schoolDetails: undefined,
+      collegeDetails: undefined,
+      examDetails: undefined,
+      playhouseDetails: undefined,
+    };
+
     switch (normalizedType) {
-      case 'school':
-        instituteData.type = 'School';
+      case "school":
+        instituteData.type = "School";
         instituteData.schoolDetails = {
           board: req.body.schoolDetails?.board,
           medium: req.body.schoolDetails?.medium,
@@ -24,23 +33,32 @@ export const registerInstitute = async (req, res) => {
         };
         break;
 
-      case 'college':
-        instituteData.type = 'College';
+      case "college":
+        const university = req.body.collegeDetails?.university;
+        const degree = req.body.collegeDetails?.degree;
+
+        if (!university || !degree) {
+          return res
+            .status(400)
+            .json({ error: "University and degree are required for college." });
+        }
+
+        instituteData.type = "College";
         instituteData.collegeDetails = {
-          university: req.body.collegeDetails?.university,
-          degree: req.body.collegeDetails?.degree,
+          university,
+          degree,
         };
         break;
 
-      case 'exam_center':
-        instituteData.type = 'Exam-Center';
+      case "exam_center":
+        instituteData.type = "Exam-Center";
         instituteData.examDetails = {
           examType: req.body.examDetails?.examType,
         };
         break;
 
-      case 'playhouse':
-        instituteData.type = 'PlayHouse';
+      case "playhouse":
+        instituteData.type = "PlayHouse";
         instituteData.playhouseDetails = {
           ageGroup: req.body.playhouseDetails?.ageGroup,
           capacity: req.body.playhouseDetails?.capacity,
@@ -49,15 +67,17 @@ export const registerInstitute = async (req, res) => {
         break;
 
       default:
-        return res.status(400).json({ error: 'Invalid institute type.' });
+        return res.status(400).json({ error: "Invalid institute type." });
     }
 
     const institute = new Institute(instituteData);
     await institute.save();
 
-    res.status(201).json({ message: 'Institute registered successfully', institute });
+    res
+      .status(201)
+      .json({ message: "Institute registered successfully", institute });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
